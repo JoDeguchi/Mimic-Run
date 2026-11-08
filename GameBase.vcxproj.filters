@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\Core">
+      <UniqueIdentifier>{65129122-e3d6-4337-b47d-602fe998a808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{8c24018c-702a-4f78-944c-8f19195e0b64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Input">
+      <UniqueIdentifier>{46fd9cda-77ca-4ae0-96ed-d597a6d680ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object">
+      <UniqueIdentifier>{a651f6c0-4507-4a41-bc8a-ee0a1b88ce91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Title">
+      <UniqueIdentifier>{95ac7953-2793-420f-b0fa-1cb658cd13a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Game">
+      <UniqueIdentifier>{1ab59edb-e99e-469a-adec-f8159c96a9ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Ending">
+      <UniqueIdentifier>{2aa1d552-2e62-49b3-a9ab-a5e982927d2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map">
+      <UniqueIdentifier>{af866c5c-fae5-4cce-b5ba-6d706eca7bd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Leaf">
+      <UniqueIdentifier>{48ae0db3-4d0e-45fe-b2fb-693cd4255ddf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Player">
+      <UniqueIdentifier>{1e68db7e-5017-4e85-ad73-91d2a5ca6ef4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\map">
+      <UniqueIdentifier>{3a6a7d69-eabb-4ef1-a4d8-5590fa8608df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Enemy">
+      <UniqueIdentifier>{f7ca72c6-54a6-4ce2-a3bd-06db243d5b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Palette">
+      <UniqueIdentifier>{deb710d3-1b77-476c-89be-4589b5b033ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Goal">
+      <UniqueIdentifier>{8b436e47-5d6d-4ca5-9bf9-d351dda7b9c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleState.cpp">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="StartGameState.cpp">
+      <Filter>ソース ファイル\Scene\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingState.cpp">
+      <Filter>ソース ファイル\Scene\Ending</Filter>
+    </ClCompile>
+    <ClCompile Include="Leaf.cpp">
+      <Filter>ソース ファイル\Map\Leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Map\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル\Map\map</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Spider.cpp">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Beetle.cpp">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Ant.cpp">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Palette.cpp">
+      <Filter>ソース ファイル\Map\Palette</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameManager.h">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyReader.h">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseReader.h">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleState.h">
+      <Filter>ソース ファイル\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="StartGameState.h">
+      <Filter>ソース ファイル\Scene\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingState.h">
+      <Filter>ソース ファイル\Scene\Ending</Filter>
+    </ClInclude>
+    <ClInclude Include="Leaf.h">
+      <Filter>ソース ファイル\Map\Leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\Map\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ソース ファイル\Map\map</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawUtil.h">
+      <Filter>ソース ファイル\Map\map</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Spider.h">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Beetle.h">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Ant.h">
+      <Filter>ソース ファイル\Map\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Palette.h">
+      <Filter>ソース ファイル\Map\Palette</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SceneBase">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAACAAAAAAAgAAAAAAAAAAEAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>SceneBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneTest">
+    <Position X="3.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAACAAAAAAAgIAAAAAAAAAEAAAAAAAACACgAAAAAA=</HashCode>
+      <FileName>SceneTest.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Background">
+    <Position X="6.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAgAAAAIAAAAAAAAAAAQAAAAgAAAAAAA=</HashCode>
+      <FileName>Background.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sprite">
+    <Position X="10.5" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAIAAAgAAAACAAAAAAAAAAAAQAAAAAAAEAAA=</HashCode>
+      <FileName>Sprite.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>
