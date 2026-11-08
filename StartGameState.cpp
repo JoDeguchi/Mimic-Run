@@ -48,7 +48,7 @@ void StartGameState::Update()
 		Init();    // 捕まったので最初から
 	}
 	if (map.IsGoal(player.GetX(), player.GetY())) {
-		// ゴール処理（あとでクリア画面へ）
+		// ゴール処理（あとでクリア画面へ） 
 	}
 }
 
