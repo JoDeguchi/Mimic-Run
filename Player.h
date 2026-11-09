@@ -13,6 +13,18 @@ class Map;
 /// </summary>
 class Player
 {
+private:
+	float x = 0, y = 0;				// ワールド座標 
+	float angle = 0;				// 向き（ラジアン） 
+	LeafType disguise = LEAF_GREEN;	// 今の葉っぱ 
+	float walkT = 0;				// 足のアニメ用 
+	int   morphFrame = 0;			// 着替えエフェクトの残りフレーム 
+	bool  camouflaged = false;
+	int   arrow_anim_frame = 0;		// 目印のアニメ用（毎フレーム増える） 
+
+	void DrawArrow(float sx, float sy) const;	// 頭上の矢印 
+
+
 public:
 	Player() {}
 
@@ -41,11 +53,5 @@ public:
 	// 画面上の点(sx, sy)がプレイヤーの近くか（ドラッグ着替えの判定用） 
 	bool IsPointOver(int sx, int sy, float camX, float camY, float range = 40.0f) const;
 
-private:
-	float x = 0, y = 0;				// ワールド座標 
-	float angle = 0;				// 向き（ラジアン） 
-	LeafType disguise = LEAF_GREEN;	// 今の葉っぱ 
-	float walkT = 0;				// 足のアニメ用 
-	int   morphFrame = 0;			// 着替えエフェクトの残りフレーム 
-	bool  camouflaged = false;
+
 };
