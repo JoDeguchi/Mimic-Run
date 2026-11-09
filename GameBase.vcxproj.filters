@@ -47,6 +47,9 @@
     <Filter Include="ソース ファイル\Map\Goal">
       <UniqueIdentifier>{8b436e47-5d6d-4ca5-9bf9-d351dda7b9c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Map\Game">
+      <UniqueIdentifier>{c22cc982-6fab-4281-893a-8b2a2563ef1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -90,6 +93,12 @@
     </ClCompile>
     <ClCompile Include="Palette.cpp">
       <Filter>ソース ファイル\Map\Palette</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameprogress.cpp">
+      <Filter>ソース ファイル\Map\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Leafshower.cpp">
+      <Filter>ソース ファイル\Map\Leaf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="Palette.h">
       <Filter>ソース ファイル\Map\Palette</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgress.h">
+      <Filter>ソース ファイル\Map\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Leafshower.h">
+      <Filter>ソース ファイル\Map\Leaf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ Beetle::Beetle(bool horizontal, float fixedPos, float minV, float maxV, float di
 	: Enemy(0, 0, 14, 170), horiz(horizontal), fixedPos(fixedPos), minV(minV), maxV(maxV), dir(dir)
 {
 	// 往復範囲のランダムな位置からスタート 
-	float v = Rf(minV, maxV);
+	float v = Randomfloat(minV, maxV);
 	if (horiz) { x = v; y = fixedPos; }
 	else       { x = fixedPos; y = v; }
 }

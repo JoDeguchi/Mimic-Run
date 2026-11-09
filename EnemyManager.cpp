@@ -25,7 +25,7 @@ void EnemyManager::Build(int stage, const Map& map)
 		for (int k = 0; k < 100; k++) {
 			bool horiz = (GetRand(1) == 0);
 			float dir = (GetRand(1) == 0) ? 1.0f : -1.0f;
-			float cx = Rf(200, mapW - 200.0f), cy = Rf(200, mapH - 200.0f), half = Rf(150, 320);
+			float cx = Randomfloat(200, mapW - 200.0f), cy = Randomfloat(200, mapH - 200.0f), half = Randomfloat(150, 320);
 			float fixedPos, minV, maxV, rx, ry;
 			if (horiz) {
 				fixedPos = cy;
@@ -44,7 +44,7 @@ void EnemyManager::Build(int stage, const Map& map)
 	// ---- アリ：障害物の中・スタート付近を避けて配置 ---- 
 	for (int i = 0; i < nAnt; i++) {
 		for (int k = 0; k < 100; k++) {
-			float ex = Rf(150, mapW - 150.0f), ey = Rf(150, mapH - 150.0f);
+			float ex = Randomfloat(150, mapW - 150.0f), ey = Randomfloat(150, mapH - 150.0f);
 			if (Dist(ex, ey, startX, startY) < 380 || map.IsInsideObstacle(ex, ey, 10)) continue;
 			enemies.push_back(std::unique_ptr<Enemy>(new Ant(ex, ey)));
 			break;
@@ -55,11 +55,11 @@ void EnemyManager::Build(int stage, const Map& map)
 		for (int k = 0; k < 120; k++) {
 			float ex, ey;
 			if (i < nGuard) {
-				float a = Rf(0, PI2), d = Rf(200, 320);
+				float a = Randomfloat(0, PI2), d = Randomfloat(200, 320);
 				ex = goalX + cosf(a) * d; ey = goalY + sinf(a) * d;
 				if (ex < 120 || ey < 120 || ex > mapW - 120.0f || ey > mapH - 120.0f) continue;
 			} else {
-				ex = Rf(150, mapW - 150.0f); ey = Rf(150, mapH - 150.0f);
+				ex = Randomfloat(150, mapW - 150.0f); ey = Randomfloat(150, mapH - 150.0f);
 				if (Dist(ex, ey, startX, startY) < 450 || Dist(ex, ey, goalX, goalY) < 100) continue;
 			}
 			if (map.IsInsideObstacle(ex, ey, 16)) continue;

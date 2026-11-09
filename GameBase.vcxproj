@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v145</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -140,7 +140,9 @@
     <ClCompile Include="EndingState.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="Gameprogress.cpp" />
     <ClCompile Include="Leaf.cpp" />
+    <ClCompile Include="Leafshower.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Palette.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -157,9 +159,11 @@
     <ClInclude Include="EndingState.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="GameProgress.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="KeyReader.h" />
     <ClInclude Include="Leaf.h" />
+    <ClInclude Include="Leafshower.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MouseReader.h" />
     <ClInclude Include="Palette.h" />

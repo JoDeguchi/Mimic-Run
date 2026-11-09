@@ -9,10 +9,10 @@ using namespace DrawUtil;
 void Map::FillCanopy(Tree& t, int cnt, float smin, float smax)
 {
 	for (int i = 0; i < cnt; i++) {
-		float a = Rf(0, PI2), rr = t.canopyR * 0.88f * sqrtf(Rf(0, 1));
+		float a = Randomfloat(0, PI2), rr = t.canopyR * 0.88f * sqrtf(Randomfloat(0, 1));
 		FloorLeaf l;
 		l.x = cosf(a) * rr; l.y = sinf(a) * rr;
-		l.size = Rf(smin, smax); l.ang = Rf(0, PI2); l.type = t.leaf;
+		l.size = Randomfloat(smin, smax); l.ang = Randomfloat(0, PI2); l.type = t.leaf;
 		t.leaves.push_back(l);
 	}
 }
@@ -34,10 +34,10 @@ void Map::AddPatch(float x, float y, float r, LeafType type)
 	Patch p; p.x = x; p.y = y; p.r = r; p.type = type;
 	int cnt = (int)(r * r * 3.14f / 650.0f);
 	for (int i = 0; i < cnt; i++) {
-		float a = Rf(0, PI2), rr = r * sqrtf(Rf(0, 1));
+		float a = Randomfloat(0, PI2), rr = r * sqrtf(Randomfloat(0, 1));
 		FloorLeaf l;
 		l.x = cosf(a) * rr; l.y = sinf(a) * rr;
-		l.size = Rf(24, 34); l.ang = Rf(0, PI2); l.type = type;
+		l.size = Randomfloat(24, 34); l.ang = Randomfloat(0, PI2); l.type = type;
 		p.leaves.push_back(l);
 	}
 	patches.push_back(p);
@@ -68,7 +68,7 @@ void Map::Build(int stage)
 	std::vector<Placed> placed;
 	auto tryPlace = [&](float clear, float& ox, float& oy) -> bool {
 		for (int k = 0; k < 80; k++) {
-			float x = Rf(90, mapW - 90.0f), y = Rf(90, mapH - 90.0f);
+			float x = Randomfloat(90, mapW - 90.0f), y = Randomfloat(90, mapH - 90.0f);
 			if (Dist(x, y, startX, startY) < 190 || Dist(x, y, goalX, goalY) < 190) continue;
 			bool ok = true;
 			for (size_t i = 0; i < placed.size(); i++)
@@ -83,26 +83,26 @@ void Map::Build(int stage)
 	float x, y;
 	// 大きな木 
 	for (int i = 0; i < nBig; i++) if (tryPlace(62, x, y)) {
-		Tree t; t.x = x; t.y = y; t.trunkR = Rf(20, 28); t.canopyR = Rf(95, 125);
+		Tree t; t.x = x; t.y = y; t.trunkR = Randomfloat(20, 28); t.canopyR = Randomfloat(95, 125);
 		t.leaf = (LeafType)GetRand(LEAF_COUNT - 1);
 		FillCanopy(t, 52, 46, 58);
 		trees.push_back(t); AddCircleObstacle(x, y, t.trunkR);
 	}
 	// ちっちゃい木 
 	for (int i = 0; i < nSmall; i++) if (tryPlace(55, x, y)) {
-		Tree t; t.x = x; t.y = y; t.trunkR = Rf(8, 11); t.canopyR = Rf(45, 60);
+		Tree t; t.x = x; t.y = y; t.trunkR = Randomfloat(8, 11); t.canopyR = Randomfloat(45, 60);
 		t.leaf = (LeafType)GetRand(LEAF_COUNT - 1);
 		FillCanopy(t, 14, 30, 38);
 		trees.push_back(t); AddCircleObstacle(x, y, t.trunkR);
 	}
 	// 切り株 
 	for (int i = 0; i < nStump; i++) if (tryPlace(50, x, y)) {
-		Stump s; s.x = x; s.y = y; s.r = Rf(18, 28);
+		Stump s; s.x = x; s.y = y; s.r = Randomfloat(18, 28);
 		stumps.push_back(s); AddCircleObstacle(x, y, s.r);
 	}
 	// 倒木（斜めあり） 
 	for (int i = 0; i < nLog; i++) if (tryPlace(95, x, y)) {
-		LogObj l; l.x = x; l.y = y; l.hw = Rf(55, 85); l.hh = Rf(12, 17); l.ang = Rf(0, PI);
+		LogObj l; l.x = x; l.y = y; l.hw = Randomfloat(55, 85); l.hh = Randomfloat(12, 17); l.ang = Randomfloat(0, PI);
 		logs.push_back(l); AddBoxObstacle(x, y, l.hw, l.hh, l.ang);
 	}
 
@@ -121,26 +121,26 @@ void Map::Build(int stage)
 	// 残りはランダム配置 
 	for (int i = 0; i < nPatch; i++) {
 		for (int k = 0; k < 60; k++) {
-			float px = Rf(150, mapW - 150.0f), py = Rf(150, mapH - 150.0f);
+			float px = Randomfloat(150, mapW - 150.0f), py = Randomfloat(150, mapH - 150.0f);
 			bool ok = true;
 			for (size_t j = 0; j < patches.size(); j++)
 				if (Dist(px, py, patches[j].x, patches[j].y) < 250) { ok = false; break; }
 			if (!ok) continue;
-			AddPatch(px, py, Rf(95, 135), (LeafType)GetRand(LEAF_COUNT - 1));
+			AddPatch(px, py, Randomfloat(95, 135), (LeafType)GetRand(LEAF_COUNT - 1));
 			break;
 		}
 	}
 
 	// ---- 地面の装飾 ---- 
 	for (int i = 0; i < 160; i++) {
-		Blob b; b.x = Rf(0, mapW); b.y = Rf(0, mapH); b.r = Rf(30, 90);
+		Blob b; b.x = Randomfloat (0, mapW); b.y = Randomfloat(0, mapH); b.r = Randomfloat(30, 90);
 		b.col = (GetRand(1) == 0) ? GetColor(18, 34, 18) : GetColor(52, 80, 40);
 		blobs.push_back(b);
 	}
 	int nFloor = (int)(mapW * mapH / 11000);
 	for (int i = 0; i < nFloor; i++) {
-		FloorLeaf l; l.x = Rf(0, mapW); l.y = Rf(0, mapH);
-		l.size = Rf(20, 30); l.ang = Rf(0, PI2); l.type = (LeafType)GetRand(LEAF_COUNT - 1);
+		FloorLeaf l; l.x = Randomfloat(0, mapW); l.y = Randomfloat(0, mapH);
+		l.size = Randomfloat(20, 30); l.ang = Randomfloat(0, PI2); l.type = (LeafType)GetRand(LEAF_COUNT - 1);
 		floorLeaves.push_back(l);
 	}
 

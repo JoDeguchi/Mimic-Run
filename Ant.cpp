@@ -22,11 +22,11 @@ void Ant::Update(const Map& map, float px, float py, bool hidden)
 		if (--timer <= 0) {
 			if (GetRand(4) == 0) {			// 5回に1回は立ち止まる 
 				dx = dy = 0;
-				timer = Rf(30, 72);
+				timer = Randomfloat(30, 72);
 			} else {						// ランダムな向きへ歩く 
-				float a = Rf(0, PI2);
+				float a = Randomfloat(0, PI2);
 				dx = cosf(a); dy = sinf(a);
-				timer = Rf(60, 150);
+				timer = Randomfloat(60, 150);
 			}
 		}
 		if (dx != 0 || dy != 0) {

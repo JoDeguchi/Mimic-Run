@@ -6,15 +6,21 @@ using namespace DrawUtil;
 
 namespace
 {
-	struct Pt { float x, y; };
+	struct Pt { 
+		float x, y; 
+	};
 
-	bool inited = false;
-	unsigned int fillCol[LEAF_COUNT], veinCol[LEAF_COUNT];
-	std::vector<Pt> shape[LEAF_COUNT];
-	Pt pivot[LEAF_COUNT];
+	bool inited = false;	//	すでに作ったかどうか
+
+	unsigned int fillCol[LEAF_COUNT], veinCol[LEAF_COUNT];	//	塗る色とふちや葉脈の色
+
+	std::vector<Pt> shape[LEAF_COUNT];	//	葉っぱの輪郭の点のリスト
+
+	Pt pivot[LEAF_COUNT];//	塗りつぶしの中心点
 
 	const char* names[LEAF_COUNT] = { "イチョウ", "緑の葉", "もみじ", "桜", "枯れ葉" };
 
+	//	葉の作成
 	void EnsureInit()
 	{
 		if (inited) return;
@@ -26,9 +32,14 @@ namespace
 		fillCol[LEAF_SAKURA] = GetColor(250, 184, 204);		veinCol[LEAF_SAKURA] = GetColor(222, 122, 152);
 		fillCol[LEAF_BROWN] = GetColor(146, 98, 52);		veinCol[LEAF_BROWN] = GetColor(92, 58, 28);
 
-		// 普通の葉（緑・枯れ葉で共用。枯れ葉は縁を少しうねらせる） 
+		// 普通の葉と枯れ葉（枯れ葉は縁を少しうねらせる） 
 		for (int kind = 0; kind < 2; kind++) {
-			LeafType lt = (kind == 0) ? LEAF_GREEN : LEAF_BROWN;
+
+			LeafType lt;
+			//	緑葉か枯れ葉か
+			if (kind == 0) lt = LEAF_GREEN;
+			else lt = LEAF_BROWN;
+
 			std::vector<Pt>& v = shape[lt];
 			float wob = (kind == 0) ? 0.0f : 0.10f;
 			const int N = 10;

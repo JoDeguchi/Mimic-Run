@@ -12,7 +12,7 @@ namespace DrawUtil
 	//	inlineをつけることで関数を呼び出す処理を省略できる”可能性”がある
 	//----------------------------------------------------------------------
 	//	角度や配置場所などをランダム範囲指定
-	inline float Rf(float a, float b)
+	inline float Randomfloat(float a, float b)
 	{
 		return a + (b - a) * (float)GetRand(10000) / 10000.0f;
 	}

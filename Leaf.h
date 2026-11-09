@@ -14,9 +14,8 @@ enum LeafType {
 class Leaf
 {
 public:
-	// size = 葉の長さ(px) / (cx,cy) = 葉の中心 / ang = 向き(ラジアン) 
-	static void Draw(LeafType type, float cx, float cy, 
-		float size, float ang, int alpha = 255, bool detail = true);
+	// size = 葉の長さ / cx,cy = 葉の中心 / ang = 向き(ラジアン) 
+	static void Draw(LeafType type, float cx, float cy, float size, float ang, int alpha = 255, bool detail = true);
 
 	//	マイナスにならないようにunsigned
 	static unsigned int FillColor(LeafType type);
