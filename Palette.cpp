@@ -10,9 +10,20 @@ using namespace DrawUtil;
 namespace
 {
 	const int SCREEN_W = 1280;		// 中央ぞろえに使う画面の幅 
-	const int SLOT     = 72;		// マスの大きさ 
-	const int GAP      = 12;		// マスの間隔 
-	const int TOP      = 12;		// 上の余白 
+	const int SLOT = 72;		// マスの大きさ 
+	const int GAP = 24;		// マスの間隔（名前札が重ならない幅） 
+	const int TOP = 12;		// 上の余白 
+
+	const float LABEL_W = 100.0f;	// 画面に表示する名前札の幅（画像の大きさに関係なくこの幅になる） 
+
+	// 名前札の画像ファイル（LeafType の順番：イチョウ・緑の葉・もみじ・桜・枯れ葉） 
+	const char* LABEL_FILE[LEAF_COUNT] = {
+		"img/label_ginkgo.png",
+		"img/label_green.png",
+		"img/label_maple.png",
+		"img/label_sakura.png",
+		"img/label_brown.png"
+	};
 
 	// i 番目のマスの左上座標（5つを画面上部の中央に並べる） 
 	void SlotPos(int i, int& x, int& y)
@@ -22,12 +33,28 @@ namespace
 		y = TOP;
 	}
 
-	// 文字を黒フチつきで中央ぞろえに描く 
+	// 画像が読み込めなかったときの代わり：文字を黒フチつきで中央ぞろえに描く 
 	void DrawLabel(int cx, int y, const char* s)
 	{
 		int x = cx - GetDrawStringWidth(s, (int)strlen(s)) / 2;
 		DrawString(x + 1, y + 1, s, GetColor(0, 0, 0));
 		DrawString(x, y, s, GetColor(235, 245, 225));
+	}
+}
+
+Palette::Palette()
+{
+	for (int i = 0; i < LEAF_COUNT; i++) {
+		labelW[i] = labelH[i] = 0;
+		labelImg[i] = LoadGraph(LABEL_FILE[i]);		// 失敗したら -1 
+		if (labelImg[i] >= 0) GetGraphSize(labelImg[i], &labelW[i], &labelH[i]);
+	}
+}
+
+Palette::~Palette()
+{
+	for (int i = 0; i < LEAF_COUNT; i++) {
+		if (labelImg[i] >= 0) DeleteGraph(labelImg[i]);
 	}
 }
 
@@ -55,6 +82,25 @@ void Palette::Update(const MouseReader& mouse, Player& player, float camX, float
 	}
 }
 
+void Palette::DrawName(int i, int slotX, int slotY) const
+{
+	float cx = slotX + SLOT * 0.5f;
+
+	// 画像がなければ文字で代用 
+	if (labelImg[i] < 0) {
+		DrawLabel((int)cx, slotY + SLOT + 2, Leaf::Name((LeafType)i));
+		return;
+	}
+
+	// 幅が LABEL_W になる倍率で、マスの真下に中央ぞろえで描く 
+	float rate = LABEL_W / (float)labelW[i];
+	float cy = slotY + SLOT + 2 + labelH[i] * rate * 0.5f;
+
+	SetDrawMode(DX_DRAWMODE_BILINEAR);			// 縮小をなめらかに 
+	DrawRotaGraphF(cx, cy, rate, 0.0, labelImg[i], TRUE);
+	SetDrawMode(DX_DRAWMODE_NEAREST);
+}
+
 void Palette::Draw(const Player& player, const MouseReader& mouse, float camX, float camY) const
 {
 	// ---- マス ---- 
@@ -72,7 +118,7 @@ void Palette::Draw(const Player& player, const MouseReader& mouse, float camX, f
 
 		// ドラッグ中の葉っぱは、元の場所をうすくする 
 		Leaf::Draw((LeafType)i, x + SLOT * 0.5f, y + SLOT * 0.5f, 50, 0.0f, (dragIdx == i) ? 90 : 255, true);
-		DrawLabel(x + SLOT / 2, y + SLOT + 2, Leaf::Name((LeafType)i));
+		DrawName(i, x, y);
 	}
 
 	// ---- ドラッグ中 ---- 

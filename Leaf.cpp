@@ -6,13 +6,15 @@ using namespace DrawUtil;
 
 namespace
 {
-	struct Pt { 
+	struct Pt {
+		//	XYのそれぞれの中心
 		float x, y; 
 	};
 
 	bool inited = false;	//	すでに作ったかどうか
 
-	unsigned int fillCol[LEAF_COUNT], veinCol[LEAF_COUNT];	//	塗る色とふちや葉脈の色
+	unsigned int fillCol[LEAF_COUNT];	//	塗りつぶしの色
+	unsigned int veinCol[LEAF_COUNT];	//	ふちや葉脈の色
 
 	std::vector<Pt> shape[LEAF_COUNT];	//	葉っぱの輪郭の点のリスト
 
@@ -23,16 +25,16 @@ namespace
 	//	葉の作成
 	void EnsureInit()
 	{
-		if (inited) return;
+		if (inited) return;	//	一度でも生成できていたら関数からぬける
 		inited = true;
 
-		fillCol[LEAF_GINKGO] = GetColor(242, 208, 40);		veinCol[LEAF_GINKGO] = GetColor(196, 152, 18);
+		fillCol[LEAF_GINKGO] = GetColor(242, 208, 0);		veinCol[LEAF_GINKGO] = GetColor(196, 152, 18);
 		fillCol[LEAF_GREEN] = GetColor(74, 172, 62);		veinCol[LEAF_GREEN] = GetColor(34, 112, 36);
 		fillCol[LEAF_MAPLE] = GetColor(214, 56, 34);		veinCol[LEAF_MAPLE] = GetColor(150, 30, 22);
 		fillCol[LEAF_SAKURA] = GetColor(250, 184, 204);		veinCol[LEAF_SAKURA] = GetColor(222, 122, 152);
 		fillCol[LEAF_BROWN] = GetColor(146, 98, 52);		veinCol[LEAF_BROWN] = GetColor(92, 58, 28);
 
-		// 普通の葉と枯れ葉（枯れ葉は縁を少しうねらせる） 
+		// 普通の葉と枯れ葉でわける（枯れ葉は縁を少しうねらせる） 
 		for (int kind = 0; kind < 2; kind++) {
 
 			LeafType lt;
