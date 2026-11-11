@@ -101,9 +101,9 @@ void Leaf::Draw(LeafType type, float cx, float cy, float size, float ang, int al
 	int n = (int)sh.size();
 	Transform f = MakeXf(cx, cy, ang);
 	float px[48], py[48];
-	for (int i = 0; i < n; i++) f.pt(sh[i].x * size, (sh[i].y + 0.5f) * size, px[i], py[i]);
+	for (int i = 0; i < n; i++) f.Point(sh[i].x * size, (sh[i].y + 0.5f) * size, px[i], py[i]);
 	float pvx, pvy;
-	f.pt(pivot[type].x * size, (pivot[type].y + 0.5f) * size, pvx, pvy);
+	f.Point(pivot[type].x * size, (pivot[type].y + 0.5f) * size, pvx, pvy);
 
 	if (alpha < 255) Blend(alpha);
 	for (int i = 0; i < n; i++) {

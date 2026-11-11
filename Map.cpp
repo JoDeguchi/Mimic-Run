@@ -322,11 +322,11 @@ void Map::DrawGround(float cx, float cy) const
 		Transform f = MakeXf(sx, sy, l.ang);
 		Transform sh = MakeXf(sx + 5, sy + 6, l.ang);
 		float q[8], w[8];
-		sh.pt(-l.hw, -l.hh, w[0], w[1]); sh.pt(l.hw, -l.hh, w[2], w[3]);
-		sh.pt(l.hw, l.hh, w[4], w[5]);   sh.pt(-l.hw, l.hh, w[6], w[7]);
+		sh.Point(-l.hw, -l.hh, w[0], w[1]); sh.Point(l.hw, -l.hh, w[2], w[3]);
+		sh.Point(l.hw, l.hh, w[4], w[5]);   sh.Point(-l.hw, l.hh, w[6], w[7]);
 		Blend(70); DrawQuadrangleAA(w[0], w[1], w[2], w[3], w[4], w[5], w[6], w[7], GetColor(0, 0, 0), TRUE); NoBlend();
-		f.pt(-l.hw, -l.hh, q[0], q[1]); f.pt(l.hw, -l.hh, q[2], q[3]);
-		f.pt(l.hw, l.hh, q[4], q[5]);   f.pt(-l.hw, l.hh, q[6], q[7]);
+		f.Point(-l.hw, -l.hh, q[0], q[1]); f.Point(l.hw, -l.hh, q[2], q[3]);
+		f.Point(l.hw, l.hh, q[4], q[5]);   f.Point(-l.hw, l.hh, q[6], q[7]);
 		DrawQuadrangleAA(q[0], q[1], q[2], q[3], q[4], q[5], q[6], q[7], GetColor(98, 66, 38), TRUE);
 		for (int k = -1; k <= 1; k++)
 			LineL(f, -l.hw + 4, k * l.hh * 0.55f, l.hw - 4, k * l.hh * 0.55f, GetColor(70, 46, 26), 1.5f);
