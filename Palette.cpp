@@ -18,11 +18,11 @@ namespace
 
 	// 名前札の画像ファイル（LeafType の順番：イチョウ・緑の葉・もみじ・桜・枯れ葉） 
 	const char* LABEL_FILE[LEAF_COUNT] = {
-		"img/label_ginkgo.png",
-		"img/label_green.png",
-		"img/label_maple.png",
-		"img/label_sakura.png",
-		"img/label_brown.png"
+		"label_ginkgo.png",
+		"label_green.png",
+		"label_maple.png",
+		"label_sakura.png",
+		"label_brown.png"
 	};
 
 	// i 番目のマスの左上座標（5つを画面上部の中央に並べる） 
