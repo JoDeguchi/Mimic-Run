@@ -1,31 +1,36 @@
 ﻿#include "Leaf.h"
 #include "DrawUtil.h"
-#include <vector>
 
 using namespace DrawUtil;
 
 namespace
 {
-	struct Pt {
-		//	XYのそれぞれの中心
-		float x, y; 
-	};
+	bool inited = false;	//	すでに初期化したかどうか
 
-	bool inited = false;	//	すでに作ったかどうか
-
-	unsigned int fillCol[LEAF_COUNT];	//	塗りつぶしの色
+	unsigned int fillCol[LEAF_COUNT];	//	塗りつぶし色
 	unsigned int veinCol[LEAF_COUNT];	//	ふちや葉脈の色
 
-	std::vector<Pt> shape[LEAF_COUNT];	//	葉っぱの輪郭の点のリスト
-
-	Pt pivot[LEAF_COUNT];//	塗りつぶしの中心点
+	int imgHandle  [LEAF_COUNT];		//	葉っぱ画像のハンドル
+	int imgH [LEAF_COUNT];				//	画像の高さ
 
 	const char* names[LEAF_COUNT] = { "イチョウ", "緑の葉", "もみじ", "桜", "枯れ葉" };
 
-	//	葉の作成
+	//	LeafType の順番：イチョウ・緑の葉・もみじ・桜・枯れ葉
+	const char* FILE_NAME[LEAF_COUNT] = {
+		"data/ityou.png",
+		"data/leaf.png",
+		"data/momiji.png",
+		"data/sakura.png",
+		"data/kareha.png"
+	};
+
+	//	種類ごとのサイズ
+	const float SCALE [LEAF_COUNT] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+
+	//	初期化（色と画像の読み込み）
 	void EnsureInit()
 	{
-		if (inited) return;	//	一度でも生成できていたら関数からぬける
+		if (inited) return; //	できていたら関数を終了する
 		inited = true;
 
 		fillCol[LEAF_GINKGO] = GetColor(242, 208, 0);		veinCol[LEAF_GINKGO] = GetColor(196, 152, 18);
@@ -34,124 +39,48 @@ namespace
 		fillCol[LEAF_SAKURA] = GetColor(250, 184, 204);		veinCol[LEAF_SAKURA] = GetColor(222, 122, 152);
 		fillCol[LEAF_BROWN] = GetColor(146, 98, 52);		veinCol[LEAF_BROWN] = GetColor(92, 58, 28);
 
-		// 普通の葉と枯れ葉でわける（枯れ葉は縁を少しうねらせる） 
-		for (int kind = 0; kind < 2; kind++) {
+		for (int i = 0; i < LEAF_COUNT; i++) {
 
-			LeafType lt;
-			//	緑葉か枯れ葉か
-			if (kind == 0) lt = LEAF_GREEN;
-			else lt = LEAF_BROWN;
+			imgH[i] = 120;	//	120px
+			imgHandle[i] = LoadGraph(FILE_NAME[i]);	//	失敗したら -1
 
-			std::vector<Pt>& v = shape[lt];
-			float wob = (kind == 0) ? 0.0f : 0.10f;
-			const int N = 10;
-			for (int i = 0; i <= N; i++) {
-				float t = (float)i / N;
-				float w = 0.34f * sinf(PI * powf(t, 0.75f)) * (1.0f + wob * sinf(t * 18.0f));
-				Pt p = { -w, -t }; v.push_back(p);
+			if (imgHandle[i] !=-1) {
+				int w = 0, h = 0;
+				GetGraphSize(imgHandle[i], &w, &h);
+				if (h > 0) imgH[i] = h;
 			}
-			for (int i = N - 1; i >= 1; i--) {
-				float t = (float)i / N;
-				float w = 0.34f * sinf(PI * powf(t, 0.75f)) * (1.0f + wob * sinf(t * 18.0f + 1.7f));
-				Pt p = { w, -t }; v.push_back(p);
-			}
-			pivot[lt].x = 0; pivot[lt].y = -0.5f;
-		}
-		// もみじ（5つの尖った葉） 
-		{
-			std::vector<Pt>& v = shape[LEAF_MAPLE];
-			for (int k = 0; k < 40; k++) {
-				float th = PI2 * k / 40.0f;
-				float m = fmaxf(0.0f, 0.5f + 0.5f * cosf(5.0f * th));
-				float r = 0.52f * (0.38f + 0.62f * powf(m, 0.7f));
-				Pt p = { r * sinf(th), -0.5f - r * cosf(th) }; v.push_back(p);
-			}
-			pivot[LEAF_MAPLE].x = 0; pivot[LEAF_MAPLE].y = -0.5f;
-		}
-		// 桜（先端が割れた花びら） 
-		{
-			static const float d[][2] = {
-				{ 0, 0 }, { -0.12f, -0.12f }, { -0.26f, -0.35f }, { -0.34f, -0.60f }, { -0.30f, -0.85f },
-				{ -0.12f, -1.00f }, { 0, -0.88f }, { 0.12f, -1.00f }, { 0.30f, -0.85f }, { 0.34f, -0.60f },
-				{ 0.26f, -0.35f }, { 0.12f, -0.12f }
-			};
-			for (int i = 0; i < 12; i++) { Pt p = { d[i][0], d[i][1] }; shape[LEAF_SAKURA].push_back(p); }
-			pivot[LEAF_SAKURA].x = 0; pivot[LEAF_SAKURA].y = -0.5f;
-		}
-		// イチョウ（扇形・中央に切れ込み） 
-		{
-			std::vector<Pt>& v = shape[LEAF_GINKGO];
-			Pt o = { 0, 0 }; v.push_back(o);
-			for (int deg = -75; deg <= 75; deg += 10) {
-				float rad = deg * PI / 180.0f;
-				float R = 0.98f - 0.30f * expf(-((float)deg / 9.0f) * ((float)deg / 9.0f));
-				Pt p = { R * sinf(rad) * 0.8f, -R * cosf(rad) }; v.push_back(p);
-			}
-			pivot[LEAF_GINKGO].x = 0; pivot[LEAF_GINKGO].y = 0;
 		}
 	}
 }
 
+//	staticで読んでいるので関数外で初期化
+//	それぞれの色を返す
 unsigned int Leaf::FillColor(LeafType type) { EnsureInit(); return fillCol[type]; }
 unsigned int Leaf::VeinColor(LeafType type) { EnsureInit(); return veinCol[type]; }
+//	名前を返す
 const char* Leaf::Name(LeafType type) { return names[type]; }
 
+//	描画
 void Leaf::Draw(LeafType type, float cx, float cy, float size, float ang, int alpha, bool detail)
 {
-	EnsureInit();
-	const std::vector<Pt>& sh = shape[type];
-	int n = (int)sh.size();
-	Transform f = MakeXf(cx, cy, ang);
-	float px[48], py[48];
-	for (int i = 0; i < n; i++) f.Point(sh[i].x * size, (sh[i].y + 0.5f) * size, px[i], py[i]);
-	float pvx, pvy;
-	f.Point(pivot[type].x * size, (pivot[type].y + 0.5f) * size, pvx, pvy);
+	(void)detail;	//	使わない
+	EnsureInit();	//	初期化呼び出し
 
+	//	もし透明度が最大ではないなら透明をON
 	if (alpha < 255) Blend(alpha);
-	for (int i = 0; i < n; i++) {
-		int j = (i + 1) % n;
-		DrawTriangleAA(pvx, pvy, px[i], py[i], px[j], py[j], fillCol[type], TRUE);
+
+	if (imgHandle[type] != -1) {
+		//	描画拡大倍率計算
+		double rate = (double)(size * SCALE[type] / (float)imgH[type]);
+		//	バイリニア方で拡大縮小・回転をなめらかにする
+		SetDrawMode(DX_DRAWMODE_BILINEAR);		
+		DrawRotaGraphF(cx, cy, rate, (double)ang, imgHandle[type], TRUE);	//	画像描画
+		SetDrawMode(DX_DRAWMODE_NEAREST);
 	}
-	if (detail) {
-		for (int i = 0; i < n; i++) {
-			int j = (i + 1) % n;
-			DrawLineAA(px[i], py[i], px[j], py[j], veinCol[type], 1.5f);
-		}
+	else {
+		//	画像が読み込めなかったときの代わり：色つきの丸
+		DrawCircleAA(cx, cy, size * 0.4f, 24, fillCol[type], TRUE);
 	}
-	unsigned int vc = veinCol[type];
-	float th = detail ? 2.0f : 1.0f;
-#define LV(x1, y1, x2, y2, t) LineL(f, (x1) * size, ((y1) + 0.5f) * size, (x2) * size, ((y2) + 0.5f) * size, vc, (t))
-	switch (type) {
-	case LEAF_GREEN:
-	case LEAF_BROWN:
-		LV(0, 0.08f, 0, -0.9f, th);
-		if (detail) {
-			for (int k = 1; k <= 3; k++) {
-				float t = 0.2f * k;
-				LV(0, -t, 0.2f, -t - 0.15f, 1.2f);
-				LV(0, -t, -0.2f, -t - 0.15f, 1.2f);
-			}
-		}
-		break;
-	case LEAF_SAKURA:
-		LV(0, 0, 0, -0.55f, 1.2f);
-		break;
-	case LEAF_MAPLE:
-		for (int k = 0; k < 5; k++) {
-			float a = PI2 * k / 5.0f;
-			LV(0, -0.5f, 0.46f * sinf(a), -0.5f - 0.46f * cosf(a), detail ? 1.5f : 1.0f);
-		}
-		LV(0, -0.5f, 0, 0.04f, th);
-		break;
-	case LEAF_GINKGO:
-		for (int deg = -60; deg <= 60; deg += 30) {
-			float rad = deg * PI / 180.0f;
-			LV(0, 0, 0.85f * sinf(rad) * 0.8f, -0.85f * cosf(rad), detail ? 1.5f : 1.0f);
-		}
-		LV(0, 0, 0, 0.08f, th);
-		break;
-	default: break;
-	}
-#undef LV
+	//	透明設定を元に戻す
 	if (alpha < 255) NoBlend();
 }

@@ -8,6 +8,7 @@
 #include "MouseReader.h"
 #include "Palette.h"
 #include "LeafShower.h"
+#include "Graph.h"
 
 class StartGameState :public GameState
 {
@@ -27,6 +28,8 @@ private:
     MouseReader mouse;
     Palette palette;
     LeafShower shower;
+ 
+    std::vector<GraphDraw> graphs;  //  描画する画像をまとめて
 
     //  プレイから
     Phase phase = PLAY;

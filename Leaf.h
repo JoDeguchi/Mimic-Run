@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <string>
 
 // 葉っぱの種類（パレット・擬態・落ち葉・木で共通） 
 enum LeafType {

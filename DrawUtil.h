@@ -34,6 +34,7 @@ namespace DrawUtil
 	}
 	//	透明処理
 	inline void Blend(int a) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, a); }
+	//	透明を終了させる
 	inline void NoBlend() { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 
 	// 葉っぱや虫などの回転用

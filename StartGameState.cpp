@@ -36,6 +36,8 @@ StartGameState::~StartGameState()
 void StartGameState::Init()
 {
 	StartStage();
+	graphs.emplace_back("operation_explain.png", 0, 550);	//	操作説明画像
+	graphs.emplace_back("purpose.png", 0, 70);	//	目的画像
 }
 
 //	ステージ配置
@@ -163,5 +165,12 @@ void StartGameState::Draw()
 				stage < MAX_STAGE ? "Enter キーで次のステージへ" : "Enter キーでタイトルへ",
 				GetColor(255, 255, 255), fontM);
 		}
+	}
+
+	//	UI画像をまとめて描画
+	for (const auto& g : graphs) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 220);
+		g.Draw();
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 }
