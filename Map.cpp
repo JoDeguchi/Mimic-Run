@@ -363,3 +363,32 @@ void Map::DrawCanopy(float cx, float cy) const
 		}
 	}
 }
+
+//	ミニマップ
+void Map::DrawMinimapTerrain(float x0, float y0, float k) const
+{
+	// 落ち葉だまり（その葉の色で、うすく）
+	Blend(140);
+	for (size_t i = 0; i < patches.size(); i++) {
+		const Patch& p = patches[i];
+		DrawCircleAA(x0 + p.x * k, y0 + p.y * k, p.r * k, 16, Leaf::FillColor(p.type), TRUE);
+	}
+	NoBlend();
+	// 倒木（向きのとおりに線で）
+	for (size_t i = 0; i < logs.size(); i++) {
+		const LogObj& l = logs[i];
+		float c = cosf(l.ang), s = sinf(l.ang);
+		DrawLineAA(x0 + (l.x - c * l.hw) * k, y0 + (l.y - s * l.hw) * k,
+			x0 + (l.x + c * l.hw) * k, y0 + (l.y + s * l.hw) * k, GetColor(150, 105, 60), 2.0f);
+	}
+	// 切り株
+	for (size_t i = 0; i < stumps.size(); i++) {
+		const Stump& s = stumps[i];
+		DrawCircleAA(x0 + s.x * k, y0 + s.y * k, fmaxf(1.5f, s.r * k), 8, GetColor(170, 128, 82), TRUE);
+	}
+	// 木（枝葉の広がりを小さな丸で）
+	for (size_t i = 0; i < trees.size(); i++) {
+		const Tree& t = trees[i];
+		DrawCircleAA(x0 + t.x * k, y0 + t.y * k, fmaxf(1.5f, t.canopyR * k * 0.35f), 8, GetColor(30, 100, 40), TRUE);
+	}
+}

@@ -16,6 +16,21 @@ namespace
 
 	const float ARROW_FLIP_Y = 130.0f;			// 画面の上端に近いとき、矢印を下側に出す境目 
 	const float PING_FRAME = 72.0f;			// 足元の輪が広がる周期（約1.2秒） 
+
+	const char* HIDE_ICON_FILE = "data/hide_aikon.png";	// 隠れ中アイコンの画像 
+	const float HIDE_ICON_W = 60.0f;					// 画面に出すアイコンの幅（画像の大きさに関係なくこの幅になる） 
+	const float HIDE_ICON_FADE = 0.12f;					// 出入りの速さ（1フレームで変わる量） 
+}
+
+Player::Player()
+{
+	hideIcon = LoadGraph(HIDE_ICON_FILE);		// 失敗したら -1（その場合アイコンは出ない） 
+	if (hideIcon >= 0) GetGraphSize(hideIcon, &hideIconW, &hideIconH);
+}
+
+Player::~Player()
+{
+	if (hideIcon >= 0) DeleteGraph(hideIcon);
 }
 
 float Player::GetRadius() const { return RADIUS; }
@@ -28,7 +43,9 @@ void Player::Init(float startX, float startY)
 	walkT = 0;
 	morphFrame = 0;
 	camouflaged = false;
-	arrow_anim_frame = 0;
+	animFrame = 0;
+	hideIconT = 0;
+	tension = 0;
 }
 
 void Player::SetDisguise(LeafType type)
@@ -45,7 +62,10 @@ bool Player::IsPointOver(int sx, int sy, float camX, float camY, float range) co
 
 void Player::Update(const KeyReader& key, const Map& map)
 {
-	arrow_anim_frame++;
+	animFrame++;
+	// 隠れ中アイコンを出し入れする（隠れているあいだ増え、見つかる状態に戻ると減る） 
+	if (camouflaged) hideIconT = fminf(1.0f, hideIconT + HIDE_ICON_FADE);
+	else             hideIconT = fmaxf(0.0f, hideIconT - HIDE_ICON_FADE);
 	if (morphFrame > 0) morphFrame--;
 
 	// ---- 入力 ---- 
@@ -134,11 +154,32 @@ void Player::DrawMarker(float camX, float camY) const
 	NoBlend();
 
 	DrawArrow(sx, sy);
+	DrawHideIcon(sx, sy);
+}
+
+void Player::DrawHideIcon(float sx, float sy) const
+{
+	if (hideIcon < 0 || hideIconT <= 0.0f) return;
+
+	float t = hideIconT;
+	float rate = HIDE_ICON_W / (float)hideIconW * (0.7f + 0.3f * t);	// 出るときに小さい所から大きくなる 
+	rate *= 1.0f + 0.08f * tension * sinf(animFrame * 0.7f);			// 敵が近いと、細かく脈打つ 
+	float cx = sx + 38.0f + sinf(animFrame * 2.3f) * 2.5f * tension;	// プレイヤーの右上（敵が近いと、ふるえる） 
+	float cy = sy - 30.0f + sinf(animFrame * 0.1f) * 2.0f + cosf(animFrame * 1.9f) * 2.0f * tension;
+
+	Blend((int)(255 * t));												// ふわっと出入りする 
+	int g = 255 - (int)(130 * tension);
+	SetDrawBright(255, g, g);											// 敵が近いほど赤くなる 
+	SetDrawMode(DX_DRAWMODE_BILINEAR);									// 縮小をなめらかに 
+	DrawRotaGraphF(cx, cy, rate, 0.0, hideIcon, TRUE);
+	SetDrawMode(DX_DRAWMODE_NEAREST);
+	SetDrawBright(255, 255, 255);
+	NoBlend();
 }
 
 void Player::DrawArrow(float sx, float sy) const
 {
-	float t = (float)arrow_anim_frame;
+	float t = (float)animFrame;
 	float wave = sinf(t * 0.18f);					// -1〜1：上下にはずむ 
 	float k = (sinf(t * 0.12f) + 1.0f) * 0.5f;		// 0〜1：色のゆっくりした点滅 
 

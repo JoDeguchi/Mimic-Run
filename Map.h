@@ -44,6 +44,9 @@ public:
 	float GetGoalY() const { return goalY; }
 	bool  IsGoal(float x, float y, float r = 44.0f) const;
 
+	// ミニマップ用：地形を縮小して描く
+	void DrawMinimapTerrain(float x0, float y0, float scale) const;
+
 private:
 	struct FloorLeaf { float x, y, size, ang; LeafType type; };
 	struct Blob { float x, y, r; unsigned int col; };

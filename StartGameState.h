@@ -9,6 +9,17 @@
 #include "Palette.h"
 #include "LeafShower.h"
 #include "Graph.h"
+#include "Minimap.h"
+#include "Tension.h"
+
+//  目的画像のモード
+enum Purpose
+{
+    SIDE_IN,    //  横に移動
+    IDLE,       //  待機
+    SIDE_OUT    //  戻る
+};
+
 
 class StartGameState :public GameState
 {
@@ -28,6 +39,8 @@ private:
     MouseReader mouse;
     Palette palette;
     LeafShower shower;
+    Minimap minimap;
+    TensionEffect tension;
  
     std::vector<GraphDraw> graphs;  //  描画する画像をまとめて
 
@@ -42,7 +55,11 @@ private:
 
     int   fontM = -1, fontL = -1;
     // ステージの作り直し(最初も含む)
-    void StartStage();			 
+    void StartStage();			
+
+    //  目的画像の処理
+    int pur_mode = SIDE_IN;
+    int pur_frame = 0;  //  目的画像のフレーム
 
 
 public:

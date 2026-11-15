@@ -80,4 +80,10 @@ public:
 			graph_hnd = -1;
 		}
 	}
+
+	int GetX()
+	{
+		return pos_x;
+	}
+	
 };

@@ -15,7 +15,13 @@ namespace
 	// クリア後待ち時間
 	const int CLEAR_WAIT = 40;		
 	//	捕まったと表示される時間
-	const int CAUGHT_FRAME = 78;		 
+	const int CAUGHT_FRAME = 78;	
+	//	目的画像の最大
+	int PUR_MAX_X = 0;
+	//	目的画像の初期値（最小値）
+	int PUR_MIN_X = -400;
+	//	目的画像の待機時間
+	int PUR_FRAME_MAX = 300;
 }
 
 //	コンストラクタ
@@ -37,7 +43,10 @@ void StartGameState::Init()
 {
 	StartStage();
 	graphs.emplace_back("operation_explain.png", 0, 550);	//	操作説明画像
-	graphs.emplace_back("purpose.png", 0, 70);	//	目的画像
+	graphs.emplace_back("purpose.png", -400, 70);	//	目的画像
+
+	//	目的画像の初期置
+	pur_frame = 0;
 }
 
 //	ステージ配置
@@ -47,6 +56,12 @@ void StartGameState::StartStage()
 	map.SetScreenSize(SCREEN_W, SCREEN_H);	
 	//	ステージ１から
 	map.Build(stage);	
+
+	tension.Reset();
+
+	//	
+	minimap.SetAtTop(stage == 2);
+
 	//	プレイヤーとマップと敵を配置
 	player.Init(map.GetStartX(), map.GetStartY());
 	enemies.Build(stage, map);
@@ -76,6 +91,50 @@ void StartGameState::Input()
 void StartGameState::Update()
 {
 	phaseFrame++;
+	int x;
+
+	if (stage == 1) {
+		//	目的画像の処理
+		switch (pur_mode)
+		{
+		case SIDE_IN:
+			// 左の画面外から目的位置まで移動
+			x = graphs[1].GetX() + 20;
+			if (x >= PUR_MAX_X)
+			{
+				x = PUR_MAX_X;
+				pur_mode = IDLE;
+				pur_frame = 0;
+			}
+			graphs[1].SetPos(x, 70);
+			break;
+
+		case IDLE:
+			// 目的位置で一定時間待機
+			if (++pur_frame >= PUR_FRAME_MAX)
+			{
+				pur_mode = SIDE_OUT;
+				pur_frame = 0;
+			}
+
+			break;
+
+		case SIDE_OUT:
+
+			// 左の画面外まで戻ったら、次の表示を始める
+			x = graphs[1].GetX() - 8;
+			if (x <= PUR_MIN_X)
+			{
+				x = PUR_MIN_X;
+				pur_frame = 0;
+			}
+			graphs[1].SetPos(x, 70);
+
+			break;
+		}
+	}
+	
+	
 
 	if (phase == CLEAR) {
 		shower.Update();
@@ -93,6 +152,10 @@ void StartGameState::Update()
 	bool hidden = map.IsCamouflaged(player.GetX(), player.GetY(), player.GetDisguise());
 	player.SetCamouflaged(hidden);
 	enemies.Update(map, player.GetX(), player.GetY(), hidden);
+	//	テンション
+	tension.Update(enemies, player.GetX(), player.GetY(), hidden);
+	player.SetTension(tension.GetTension());
+
 	map.CalcCamera(player.GetX(), player.GetY(), camX, camY);
 	palette.Update(mouse, player, camX, camY);
 
@@ -135,6 +198,7 @@ void StartGameState::Draw()
 	GameProgress& prog = GameProgress::Get();
 
 	if (phase == PLAY) {
+		tension.Draw(player.GetX(), player.GetY(), camX, camY);
 		palette.Draw(player, mouse, camX, camY);
 		snprintf(buf, sizeof(buf), "STAGE %d / %d", stage, MAX_STAGE);
 		DrawStringToHandle(14, 10, buf, GetColor(255, 255, 255), fontM, GetColor(0, 0, 0));
@@ -173,4 +237,6 @@ void StartGameState::Draw()
 		g.Draw();
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
+	minimap.Draw(map, enemies, player, camX, camY);
 }

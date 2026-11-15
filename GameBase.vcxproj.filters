@@ -50,6 +50,9 @@
     <Filter Include="ソース ファイル\Map\Game">
       <UniqueIdentifier>{c22cc982-6fab-4281-893a-8b2a2563ef1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Map\map\minimap">
+      <UniqueIdentifier>{c09a959d-4edb-4da8-8790-ba5a03802581}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -99,6 +102,12 @@
     </ClCompile>
     <ClCompile Include="Leafshower.cpp">
       <Filter>ソース ファイル\Map\Leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="Minimap.cpp">
+      <Filter>ソース ファイル\Map\map\minimap</Filter>
+    </ClCompile>
+    <ClCompile Include="Tension.cpp">
+      <Filter>ソース ファイル\Map\map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="Leafshower.h">
       <Filter>ソース ファイル\Map\Leaf</Filter>
+    </ClInclude>
+    <ClInclude Include="Minimap.h">
+      <Filter>ソース ファイル\Map\map\minimap</Filter>
+    </ClInclude>
+    <ClInclude Include="Tension.h">
+      <Filter>ソース ファイル\Map\map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,14 @@ namespace
 
 	const float LABEL_W = 100.0f;	// 画面に表示する名前札の幅（画像の大きさに関係なくこの幅になる） 
 
+	// 枠の画像（どちらも 200×200） 
+	const char* FRAME_NORMAL_FILE = "data/frame_normal.png";
+	const char* FRAME_LIGHT_FILE = "data/frame_light.png";
+	const float FRAME_IMG_SIZE = 200.0f;	// 枠画像の元の大きさ 
+	const float FRAME_SIZE = 76.0f;		// 通常の枠を画面に描く大きさ（マスより少し大きめ） 
+	// 光る枠は周りの光の分だけ枠本体が小さく描かれているので、大きめに描いて本体の大きさをそろえる 
+	const float LIGHT_RATE = 1.2f;
+
 	// 名前札の画像ファイル（LeafType の順番：イチョウ・緑の葉・もみじ・桜・枯れ葉） 
 	const char* LABEL_FILE[LEAF_COUNT] = {
 		"label_ginkgo.png",
@@ -49,6 +57,8 @@ Palette::Palette()
 		labelImg[i] = LoadGraph(LABEL_FILE[i]);		// 失敗したら -1 
 		if (labelImg[i] >= 0) GetGraphSize(labelImg[i], &labelW[i], &labelH[i]);
 	}
+	frameNormal = LoadGraph(FRAME_NORMAL_FILE);		// 失敗したら -1 
+	frameLight = LoadGraph(FRAME_LIGHT_FILE);
 }
 
 Palette::~Palette()
@@ -56,6 +66,8 @@ Palette::~Palette()
 	for (int i = 0; i < LEAF_COUNT; i++) {
 		if (labelImg[i] >= 0) DeleteGraph(labelImg[i]);
 	}
+	if (frameNormal >= 0) DeleteGraph(frameNormal);
+	if (frameLight >= 0) DeleteGraph(frameLight);
 }
 
 int Palette::HitSlot(int mx, int my) const
@@ -101,6 +113,29 @@ void Palette::DrawName(int i, int slotX, int slotY) const
 	SetDrawMode(DX_DRAWMODE_NEAREST);
 }
 
+void Palette::DrawFrame(int slotX, int slotY, bool selected) const
+{
+	int handle = selected ? frameLight : frameNormal;
+
+	// 画像がなければ、これまでの四角で代用 
+	if (handle < 0) {
+		unsigned int frame = selected ? GetColor(255, 220, 80) : GetColor(150, 180, 150);
+		DrawBox(slotX, slotY, slotX + SLOT, slotY + SLOT, frame, FALSE);
+		if (selected) DrawBox(slotX + 1, slotY + 1, slotX + SLOT - 1, slotY + SLOT - 1, frame, FALSE);
+		return;
+	}
+
+	// マスの中心に、枠の大きさが FRAME_SIZE になる倍率で描く 
+	float cx = slotX + SLOT * 0.5f;
+	float cy = slotY + SLOT * 0.5f;
+	float rate = FRAME_SIZE / FRAME_IMG_SIZE;
+	if (selected) rate *= LIGHT_RATE;
+
+	SetDrawMode(DX_DRAWMODE_BILINEAR);			// 縮小をなめらかに 
+	DrawRotaGraphF(cx, cy, rate, 0.0, handle, TRUE);
+	SetDrawMode(DX_DRAWMODE_NEAREST);
+}
+
 void Palette::Draw(const Player& player, const MouseReader& mouse, float camX, float camY) const
 {
 	// ---- マス ---- 
@@ -108,13 +143,13 @@ void Palette::Draw(const Player& player, const MouseReader& mouse, float camX, f
 		int x, y; SlotPos(i, x, y);
 		bool selected = (player.GetDisguise() == (LeafType)i);
 
+		// 中の暗い背景 
 		Blend(150);
 		DrawBox(x, y, x + SLOT, y + SLOT, GetColor(10, 24, 10), TRUE);
 		NoBlend();
 
-		unsigned int frame = selected ? GetColor(255, 220, 80) : GetColor(150, 180, 150);
-		DrawBox(x, y, x + SLOT, y + SLOT, frame, FALSE);
-		if (selected) DrawBox(x + 1, y + 1, x + SLOT - 1, y + SLOT - 1, frame, FALSE);	// 選択中は枠を太く 
+		// 枠（選択中は frame_light、ほかは frame_normal） 
+		DrawFrame(x, y, selected);
 
 		// ドラッグ中の葉っぱは、元の場所をうすくする 
 		Leaf::Draw((LeafType)i, x + SLOT * 0.5f, y + SLOT * 0.5f, 50, 0.0f, (dragIdx == i) ? 90 : 255, true);
