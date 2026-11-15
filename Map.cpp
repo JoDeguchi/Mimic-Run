@@ -6,10 +6,14 @@ using namespace DrawUtil;
 // ------------------------------------------------------------
 //  生成 
 // ------------------------------------------------------------
+//	木に葉っぱを散らす
 void Map::FillCanopy(Tree& t, int cnt, float smin, float smax)
 {
 	for (int i = 0; i < cnt; i++) {
-		float a = Randomfloat(0, PI2), rr = t.canopyR * 0.88f * sqrtf(Randomfloat(0, 1));
+		//	範囲ランダム
+		float a = Randomfloat(0, PI2);
+		//	円の中に均等に
+		float rr = t.canopyR * 0.88f * sqrtf(Randomfloat(0, 1));
 		FloorLeaf l;
 		l.x = cosf(a) * rr; l.y = sinf(a) * rr;
 		l.size = Randomfloat(smin, smax); l.ang = Randomfloat(0, PI2); l.type = t.leaf;

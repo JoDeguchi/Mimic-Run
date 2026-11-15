@@ -53,6 +53,9 @@
     <Filter Include="ソース ファイル\Map\map\minimap">
       <UniqueIdentifier>{c09a959d-4edb-4da8-8790-ba5a03802581}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Map\map\base">
+      <UniqueIdentifier>{5e0082bd-b179-4cab-8a9c-a3c17eb399b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -75,9 +78,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\Map\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>ソース ファイル\Map\map</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\Map\Enemy</Filter>
@@ -106,8 +106,11 @@
     <ClCompile Include="Minimap.cpp">
       <Filter>ソース ファイル\Map\map\minimap</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル\Map\map\base</Filter>
+    </ClCompile>
     <ClCompile Include="Tension.cpp">
-      <Filter>ソース ファイル\Map\map</Filter>
+      <Filter>ソース ファイル\Map\map\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,12 +144,6 @@
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\Map\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>ソース ファイル\Map\map</Filter>
-    </ClInclude>
-    <ClInclude Include="DrawUtil.h">
-      <Filter>ソース ファイル\Map\map</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>ソース ファイル\Map\Enemy</Filter>
     </ClInclude>
@@ -174,8 +171,14 @@
     <ClInclude Include="Minimap.h">
       <Filter>ソース ファイル\Map\map\minimap</Filter>
     </ClInclude>
+    <ClInclude Include="DrawUtil.h">
+      <Filter>ソース ファイル\Map\map\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ソース ファイル\Map\map\base</Filter>
+    </ClInclude>
     <ClInclude Include="Tension.h">
-      <Filter>ソース ファイル\Map\map</Filter>
+      <Filter>ソース ファイル\Map\map\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
